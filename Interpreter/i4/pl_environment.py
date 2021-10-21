@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """ generated source for module Environment """
-#  (C) 2013 Jim Buffenbarger
+
 #  All rights reserved.
 from pl_evalexception import EvalException
 

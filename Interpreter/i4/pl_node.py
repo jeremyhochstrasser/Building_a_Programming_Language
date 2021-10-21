@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 """ generated source for module Node """
 
-#  (C) 2013 Jim Buffenbarger
-#  All rights reserved.
+
+
+from pl_evalexception import EvalException
+
 
 class Node(object):
     """ generated source for class Node """

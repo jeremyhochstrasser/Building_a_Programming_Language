@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 """ generated source for module Scanner """
-#  (C) 2013 Jim Buffenbarger
-#  All rights reserved.
+
 from pl_syntaxexception import SyntaxException
 from pl_token import Token
 import sys

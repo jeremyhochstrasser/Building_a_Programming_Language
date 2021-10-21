@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 """ generated source for module Interpreter """
-#  (C) 2013 Jim Buffenbarger
-#  All rights reserved.
+#Jeremy Hochstrasser
 from pl_parser import Parser
 from pl_environment import Environment
 from pl_syntaxexception import SyntaxException

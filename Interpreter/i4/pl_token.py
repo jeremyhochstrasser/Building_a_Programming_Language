@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 """ generated source for module Token """
-#  (C) 2013 Jim Buffenbarger
-#  All rights reserved.
+
 class Token(object):
     """ generated source for class Token """
 

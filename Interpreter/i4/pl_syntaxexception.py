@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 """ generated source for module SyntaxException """
-#  (C) 2013 Jim Buffenbarger
-#  All rights reserved.
+
 class SyntaxException(Exception):
     """ generated source for class SyntaxException """
 

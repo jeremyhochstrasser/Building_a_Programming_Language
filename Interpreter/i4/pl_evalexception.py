@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 """ generated source for module EvalException """
-#  (C) 2013 Jim Buffenbarger
-#  All rights reserved.
+
 class EvalException(Exception):
     """ generated source for class EvalException """
 
