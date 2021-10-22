@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """ generated source for module Scanner """
-
+#Jeremy Hochstrasser
 from pl_syntaxexception import SyntaxException
 from pl_token import Token
 import sys
@@ -15,7 +15,7 @@ class Scanner(object):
     legits = set("_").union(digits).union(letters)
     #symbols = set("@[\]^_`!\"#$%&',)(*+-./:;<=>?")
     operators = {'=','+','-','*','/','(',')',';','<','<=','>','>=','<>','=='}
-    keywords = {'wr','rd','if','then','else','while','do','begin','end'}
+    keywords = {'wr','rd','if','then','else','while','do','begin','end'} #implement new keywords in scanner
     token = ""
     lexeme = ""
 

@@ -1,11 +1,9 @@
 #!/usr/bin/env python
 """ generated source for module Node """
 
-
-
+#  (C) 2013 Jim Buffenbarger
+#  All rights reserved.
 from pl_evalexception import EvalException
-
-
 class Node(object):
     """ generated source for class Node """
     pos = 0
@@ -216,3 +214,77 @@ class NodeWr(Node):
         val = self.expr.eval(env)
         print(val)
         return val
+    
+class NodeRd(Node):
+    def __init__(self, id, num):
+        super(NodeRd, self).__init__()
+        self.id = id
+        self.num = num
+
+    def eval(self, env):
+        return env.put(self.id, self.num)
+    
+class NodeIf(Node):
+    def __init__(self, boolExpr, stmt, stmtElse):
+        super(NodeIf, self).__init__()
+        self.boolExpr = boolExpr
+        self.stmt = stmt
+        self.stmtElse = stmtElse
+
+    def eval(self, env):
+        if self.boolExpr.eval(env) == True:
+            return self.stmt.eval(env)
+        elif self.stmtElse is not None:
+            return self.stmtElse.eval(env)
+        return None
+
+class NodeWhile(Node):
+    def __init__(self, boolExpr, stmt):
+        super(NodeWhile, self).__init__()
+        self.boolExpr = boolExpr
+        self.stmt = stmt
+
+    def eval(self, env):
+        val = None
+        while self.boolExpr.eval(env) == True:
+            val = self.stmt.eval(env)
+        return val
+
+class NodeBeg(Node):
+    def __init__(self, stmtsBlock):
+        super(NodeBeg, self).__init__()
+        self.stmtsBlock = stmtsBlock
+
+    def eval(self, env):
+        return self.stmtsBlock.eval(env)
+
+class NodeRelop(Node):
+    def __init__(self, pos, relop):
+        super(NodeRelop, self).__init__()
+        self.pos = pos
+        self.relop = relop
+        
+    def op(self, o1, o2):
+        if self.relop == "==":
+            return o1 == o2
+        if self.relop == "<=":
+            return o1 <= o2        
+        if self.relop == ">=":
+            return o1 >= o2
+        if self.relop == "<>":
+            return o1 != o2
+        if self.relop == ">":
+            return o1 > o2
+        if self.relop == "<":
+            return o1 < o2   
+        raise EvalException(self.pos, "bogus relop: " + self.relop)
+    
+class NodeBoolExpr(Node):
+    def __init__(self, expr1, relop, expr2):
+        super(NodeBoolExpr, self).__init__()
+        self.relop = relop
+        self.expr1 = expr1
+        self.expr2 = expr2
+        
+    def eval(self, env):
+        return self.relop.op(self.expr1.eval(env),  self.expr2.eval(env))

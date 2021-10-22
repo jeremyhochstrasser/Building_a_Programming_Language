@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 from pl_syntaxexception import SyntaxException
 from pl_node import *
 from pl_scanner import Scanner
@@ -90,7 +89,7 @@ class Parser(object):
         assn = NodeAssn(nid.lex(), expr)
         return assn
 
-    def parseWr(self):
+    def parseWr(self): #Parse wr
         """ generated source for method parseWr """
         self.match("wr")
         expr = self.parseExpr()
@@ -98,24 +97,34 @@ class Parser(object):
         return wr
 
     def parseStmt(self):
-        """ generated source for method parseStmt """
+        """ generated source for method parseStmt """ #updated stmt accepting new keywords (most recent: rd, if, then, else, begin, while)
         if self.curr() == Token("wr"):
             wr = self.parseWr()
             return NodeStmt(wr)
         if self.curr() == Token("id"):
             assn = self.parseAssn()
             return NodeStmt(assn)
+        if self.curr() == Token("rd"):
+            rd = self.parseRd()
+            return NodeStmt(rd)
+        if self.curr() == Token("while"):
+            whileNode = self.parseWhile()
+            return NodeStmt(whileNode)
+        if self.curr() == Token("if"):
+            ifElse = self.parseIf()
+            return NodeStmt(ifElse)
+        if self.curr() == Token("begin"):
+            beg = self.parseBeg()
+            return NodeStmt(beg)
         return None
 
-    def parseBlock(self):
+    def parseBlock(self):   #Parse the block ending with ";"
         """ generated source for method parseBlock """
         stmt = self.parseStmt()
         rest = None
         if self.curr() == Token(";"):
             self.match(";")
             rest = self.parseBlock()
-        #if not self.scanner.done(): 
-        #    raise SyntaxException(self.pos, self.curr(), 'end')
         block = NodeBlock(stmt, rest)
         return block
 
@@ -125,4 +134,68 @@ class Parser(object):
         self.scanner = Scanner(program)
         self.scanner.next()
         return self.parseBlock()
+   
+    def parseRelop(self):
+        if self.curr() == Token("=="):
+            self.match("==")
+            return NodeRelop(self.pos(), "==")
+        if self.curr() == Token("<"):
+            self.match("<")
+            return NodeRelop(self.pos(), "<")
+        if self.curr() == Token("<="):
+            self.match("<=")
+            return NodeRelop(self.pos(), "<=")
+        if self.curr() == Token(">"):
+            self.match(">")
+            return NodeRelop(self.pos(), ">")
+        if self.curr() == Token(">="):
+            self.match(">=")
+            return NodeRelop(self.pos(), ">=")
+        if self.curr() == Token("<>"):
+            self.match("<>")
+            return NodeRelop(self.pos(), "<>")  
+        return None
+    
+    def parseBoolExpr(self):
+        expr1 = self.parseExpr()
+        relop = self.parseRelop()
+        expr2 = self.parseExpr()
+        boolExpr = NodeBoolExpr(expr1, relop, expr2)
+        return boolExpr
+    
+    def parseIf(self):
+        self.match("if")
+        boolExpr = self.parseBoolExpr()
+        self.match("then")
+        stmt = self.parseStmt()
+        elseStmt = None;
+        if self.curr() == Token("else"):
+            self.match("else")
+            elseStmt = self.parseStmt()
+        ifStmt = NodeIf(boolExpr, stmt, elseStmt)
+        return ifStmt
+    
+    def parseWhile(self):
+        self.match("while")
+        boolExpr = self.parseBoolExpr()
+        self.match("do")
+        stmt = self.parseStmt()
+        whileStmt = NodeWhile(boolExpr, stmt)
+        return whileStmt
+    
+    def parseRd(self):
+        self.match("rd")
+        id = self.curr()
+        self.match("id")
+        num = float(input())
+        rd = NodeRd(id.lex(), num)
+        return rd
+    
+    def parseBeg(self):
+        self.match("begin")
+        block = self.parseBlock()
+        self.match("end")
+        beg = NodeBeg(block)
+        return beg
+        
 
